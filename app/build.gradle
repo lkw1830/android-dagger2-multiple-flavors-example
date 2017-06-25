@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId 'com.example.dagger'
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    // Specifies a flavor dimension.
+    flavorDimensions "app", "environment"
+
+    productFlavors {
+        free {
+            dimension "app"
+            applicationId "com.example.dagger.free"
+            ext {
+                dev = "dev.bikedating"
+                prod = "winston.bikedating"
+            }
+        }
+        premium {
+            dimension "app"
+            applicationId "com.example.dagger.premium"
+            ext {
+                dev = "dev.bikedating.com"
+                prod = "bikedating.com"
+            }
+        }
+        dev {
+            dimension "environment"
+        }
+        prod {
+            dimension "environment"
+        }
+        applicationVariants.all { variant ->
+            def flavors = variant.productFlavors
+            // flavorDimensions "app" -> 0, "environment" -> 1
+            def app = flavors[0]
+            def environment = flavors[1]
+            variant.buildConfigField "String", "URL", "\"${app[environment.name]}\""
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:multidex:1.0.1'
+    compile "com.google.dagger:dagger:$daggerVersion"
+    compile "com.google.dagger:dagger-android:$daggerVersion"
+    compile "com.google.dagger:dagger-android-support:$daggerVersion"
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile "com.android.support:support-annotations:$supportLibraryVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
+}
