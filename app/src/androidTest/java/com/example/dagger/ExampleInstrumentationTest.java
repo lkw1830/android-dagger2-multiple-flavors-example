@@ -24,6 +24,6 @@ public class ExampleInstrumentationTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.dagger.winston.bikedating", appContext.getPackageName());
+        assertEquals("com.example.dagger", appContext.getPackageName());
     }
 }

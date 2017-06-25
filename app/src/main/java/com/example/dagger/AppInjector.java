@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.Bundle;
 
 import dagger.android.AndroidInjection;
+import dagger.android.HasActivityInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 /**
@@ -15,10 +16,10 @@ public class AppInjector {
     private AppInjector() {
     }
 
-    public static void init(DaggerApplication bikeApp) {
-        DaggerAppComponent.builder().application(bikeApp).build().inject(bikeApp);
+    public static void init(DaggerApplication app) {
+        DaggerAppComponent.builder().application(app).build().inject(app);
 
-        bikeApp
+        app
                 .registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
                     @Override
                     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class AppInjector {
     }
 
     private static void handleActivity(Activity activity) {
-        if (activity instanceof HasSupportFragmentInjector) {
+        if (activity instanceof HasActivityInjector) {
             AndroidInjection.inject(activity);
         }
     }
