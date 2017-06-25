@@ -15,7 +15,7 @@ public class AppInjector {
     private AppInjector() {
     }
 
-    public static void init(BikeApplication bikeApp) {
+    public static void init(DaggerApplication bikeApp) {
         DaggerAppComponent.builder().application(bikeApp).build().inject(bikeApp);
 
         bikeApp
